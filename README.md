@@ -3,7 +3,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/hermes-dm.svg)](https://pypi.org/project/hermes-dm/)
 [![License: Zlib](https://img.shields.io/badge/License-Zlib-lightgrey.svg)](https://opensource.org/licenses/Zlib)
 
-**Hermes** is a lightweight, high-performance, and asynchronous device manager designed to bridge the gap between classic test/measurement hardware and modern software architectures. 
+**Hermes** is a lightweight, high-performance, and asynchronous device manager designed to bridge the gap between classic test/measurement hardware and modern software architectures.
 
 By leveraging **ZeroMQ (ZMQ)** for swift, non-blocking message passing and **SCPI** (Standard Commands for Programmable Instruments) for hardware communication, Hermes allows you to seamlessly control, monitor, and log data from generic lab instruments.
 
@@ -89,7 +89,7 @@ Welcome! This section covers everything you need to know to set up a local devel
 `hermes-dm` uses a decoupled, event-driven, client-server architecture designed for high-performance, non-blocking laboratory hardware control.
 
 * **The Hermes Client:** A lightweight, synchronous Python API exposed to user scripts or notebooks. It handles telemetry requests, sends command packets over ZeroMQ, and translates backend JSON error states back into native Python exceptions.
-* **The Hermes Daemon:** A persistent, asynchronous background process (`asyncio`) handling incoming network traffic via ZeroMQ. 
+* **The Hermes Daemon:** A persistent, asynchronous background process (`asyncio`) handling incoming network traffic via ZeroMQ.
 * **Isolated Thread Pools:** To prevent slow hardware I/O (like instrument connection scans or legacy GPIB commands) from locking up the main asynchronous network event loop, the daemon uses dedicated OS thread pools (`asyncio.to_thread` and custom `ThreadPoolExecutor` instances) to isolate synchronous PyVISA drivers.
 
 ---
@@ -127,14 +127,14 @@ Follow these steps to set up an isolated development environment running your co
 
 5. **Install the local Git hooks:**
    ```bash
-   pre-commit install
+   python -m pre_commit install
    ```
 
 ---
 
 ### Development Tools Stack
 
-We use a modern, consolidated tool stack to enforce code quality, verify async test patterns, and automate package distribution. 
+We use a modern, consolidated tool stack to enforce code quality, verify async test patterns, and automate package distribution.
 
 | Tool | Purpose | Standalone Command |
 | :--- | :--- | :--- |
@@ -170,7 +170,7 @@ We use a modern, consolidated tool stack to enforce code quality, verify async t
 * **Building Documentation Locally:**
   To compile your `.rst` design layout and extract code docstrings via Sphinx into a responsive, dark-mode-ready static HTML site using the Furo theme:
   ```bash
-  sphinx-build -b html docs/ docs/_build/html
+  python -m sphinx -b html docs/ docs/_build/html
   ```
   *After compilation, open `docs/_build/html/index.html` in your browser to preview the output.*
 
