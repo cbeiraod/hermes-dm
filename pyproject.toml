@@ -112,3 +112,21 @@ default-section = "third-party"
 # Mimic Black formatting perfectly
 quote-style = "preserve"
 indent-style = "space"
+
+[tool.bumpversion]
+current_version = "0.0.1"
+commit = true
+tag = true
+commit_args = "--no-verify" # Skips pre-commit hooks during the automated version bump commit
+
+# 1. Update the pyproject.toml version
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+# 2. Update the Python package __init__ version
+[[tool.bumpversion.files]]
+filename = "src/hermes_dm/__init__.py"
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'
