@@ -42,12 +42,16 @@ classifiers = [
 dependencies = [
     "pyzmq>=25.0.0",
     "pyvisa>=1.13.0",
-    "pyvisa-py>=0.7.2",
     "typer>=0.9.0",
 ]
 
 # Optional dependencies for testing
 [project.optional-dependencies]
+pyvisa-py = [
+    "pyvisa-py>=0.7.2",
+    "pyusb>=1.2.1",
+    "zeroconf>=0.131.0",
+]
 dev = [
     # Testing
     "pytest>=8.0.0",
