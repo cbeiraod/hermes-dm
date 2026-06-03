@@ -42,3 +42,6 @@ venv.bak/
 
 # Local logs
 *.log
+
+# Documentation
+docs/_build/
