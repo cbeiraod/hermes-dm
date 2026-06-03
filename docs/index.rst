@@ -12,6 +12,7 @@ Hermes-DM is a modular, asynchronous device manager and logger built on ZeroMQ.
    api
    changelog
    authors
+   contributing
 
 Indices and tables
 ==================
