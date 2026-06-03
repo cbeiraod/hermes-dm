@@ -1,0 +1,102 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hermes-dm"
+version = "0.0.1"
+authors = [
+    { name="Cristóvão Beirão da Cruz e Silva", email="cbeiraod@cern.ch" }
+]
+description = "An asynchronous SCPI device manager and logger built on ZeroMQ."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "zlib License" }
+classifiers = [
+    # Development Status
+    "Development Status :: 3 - Alpha", # Change to 4 - Beta or 5 - Production/Stable later
+    
+    # Intended Audience
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Manufacturing",
+    
+    # Topic / Category
+    "Topic :: System :: Hardware",
+    "Topic :: System :: Hardware :: Hardware Drivers",
+    "Topic :: Scientific/Engineering",
+    
+    # License
+    "License :: OSI Approved :: zlib/libpng License",
+    
+    # Python Versions Supported
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    
+    # Operating System
+    "Operating System :: OS Independent", # The Python code is OS independent, even if PyVISA relies on local OS drivers
+]
+dependencies = [
+    "pyzmq>=25.0.0",
+    "pyvisa>=1.13.0",
+    "pyvisa-py>=0.7.2",
+    "typer>=0.9.0",
+]
+
+# Optional dependencies for testing
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/cbeiraod/hermes-dm"
+Repository = "https://github.com/cbeiraod/hermes-dm"
+"Bug Tracker" = "https://github.com/cbeiraod/hermes-dm/issues"
+
+[project.scripts]
+hermes = "hermes_dm.cli:main"
+hermes-daemon = "hermes_dm.daemoncli:main"
+hermes-monitor = "hermes_dm.monitor:main"
+
+[tool.ruff]
+# Target Python 3.9 features
+target-version = "py39"
+line-length = 140
+extend-exclude = [
+    "venv",
+    "dist",
+    "build",
+    ".pytest_cache",
+    ".github"
+]
+
+[tool.ruff.lint]
+# E: pycodestyle (standard PEP8 errors)
+# F: Pyflakes (syntax errors, undefined variables)
+# I: isort (import sorting)
+select = ["E", "F", "I", "B", "C90"]
+ignore = ["E203", "E501", "E701", "E731"]
+
+[tool.ruff.lint.per-file-ignores]
+# Ignore unused imports in __init__.py files
+"__init__.py" = ["F401"]
+
+[tool.ruff.lint.mccabe]
+# Replaces flake8 max-complexity
+max-complexity = 18
+
+[tool.ruff.lint.isort]
+force-single-line = true
+known-first-party = ["hermes_dm"]
+forced-separate = ["tests"]
+default-section = "third-party"
+
+[tool.ruff.format]
+# Mimic Black formatting perfectly
+quote-style = "preserve"
+indent-style = "space"

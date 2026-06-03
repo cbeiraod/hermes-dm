@@ -1,0 +1,21 @@
+repos:
+  # 1. Standard File Checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: debug-statements
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+
+  # 2. Ruff: The all-in-one Linter and Formatter
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.5
+    hooks:
+      # Run the linter and import sorter
+      - id: ruff
+        args: [ --fix ]
+      # Run the Black-compatible formatter
+      - id: ruff-format
