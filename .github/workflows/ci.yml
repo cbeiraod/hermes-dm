@@ -1,0 +1,110 @@
+name: Hermes-DM CI
+
+# 1. PATH FILTERING & TRIGGERS
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*.*.*" ]       # Triggers on version tags (e.g., v1.0.0, v0.1.0-rc1)
+    paths:                   # Ignores pure documentation changes
+      - 'src/**'
+      - 'tests/**'
+      - 'pyproject.toml'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      full_matrix:
+        description: "Force run Windows and macOS tests"
+        type: boolean
+        default: false
+
+# Prevents multiple pipelines from running at the same time if you push twice quickly
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ==========================================
+  # JOB 1: LINT & FORMAT (The Fail-Fast Gate)
+  # ==========================================
+  lint:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 5       # 3. STRICT TIMEOUTS
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"       # 2. DEPENDENCY CACHING (Instant magic!)
+
+      - name: Install Linting Tools
+        run: pip install pre-commit
+
+      - name: Run Pre-commit Hooks
+        run: pre-commit run --all-files
+
+
+  # ==========================================
+  # JOB 2: LINUX BASELINE (Runs every time)
+  # ==========================================
+  test-linux:
+    name: Test (Linux)
+    needs: lint              # Only runs if linting passes
+    runs-on: ubuntu-latest
+    timeout-minutes: 10      # Generous enough for PyVISA scans, strict enough to prevent runaway loops
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Hermes and Dev Dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Run Pytest
+        run: pytest -v
+
+
+  # ==========================================
+  # JOB 3: RELEASE CANDIDATES (Windows & macOS)
+  # ==========================================
+  test-extended-os:
+    name: Test (${{ matrix.os }})
+    needs: test-linux        # Only runs if Linux passes first
+    # 4. CONDITIONAL TRIGGER: Only runs if it's a version tag OR manually requested
+    if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.full_matrix == 'true'
+
+    strategy:
+      fail-fast: false       # If Windows fails, let macOS finish so we see all errors
+      matrix:
+        os: [windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Hermes and Dev Dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Run Pytest
+        run: pytest -v
