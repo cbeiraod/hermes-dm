@@ -1,15 +1,18 @@
 # Hermes Device Manager (`hermes-dm`)
 
 [![License: Zlib](https://img.shields.io/badge/License-Zlib-lightgrey.svg)](https://opensource.org/licenses/Zlib)
+
 [![CI](https://github.com/cbeiraod/hermes-dm/actions/workflows/ci.yml/badge.svg)](https://github.com/cbeiraod/hermes-dm/actions/workflows/ci.yml)
 [![Documentation Status](https://readthedocs.org/projects/hermes-dm/badge/?version=latest)](https://hermes-dm.readthedocs.io/en/latest/?badge=latest)
+
 [![PyPI version](https://img.shields.io/pypi/v/hermes-dm.svg)](https://pypi.org/project/hermes-dm/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/hermes-dm.svg)](https://pypi.org/project/hermes-dm/)
 [![PyPI Wheel](https://img.shields.io/pypi/wheel/hermes-dm.svg)](https://pypi.org/project/hermes-dm/)
+
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-**Hermes** is a lightweight, high-performance, and asynchronous device manager designed to bridge the gap between classic test/measurement hardware and modern software architectures.
+**Hermes-DM** is a lightweight, high-performance, and asynchronous device manager that provides a native, modern software interface for classic test and measurement hardware.
 
 By leveraging **ZeroMQ (ZMQ)** for swift, non-blocking message passing and **SCPI** (Standard Commands for Programmable Instruments) for hardware communication, Hermes allows you to seamlessly control, monitor, and log data from generic lab instruments.
 
