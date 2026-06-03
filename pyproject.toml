@@ -64,6 +64,11 @@ dev = [
     "twine>=5.0.0",
     "bump-my-version>=0.20.0"
 ]
+docs = [
+    "sphinx>=7.0.0",
+    "furo>=2024.0.0",                 # Modern, responsive theme
+    "sphinx-autodoc-typehints>=2.0.0" # Automatically pulls Python type hints into docs
+]
 
 [project.urls]
 Homepage = "https://github.com/cbeiraod/hermes-dm"
@@ -130,3 +135,9 @@ replace = 'version = "{new_version}"'
 filename = "src/hermes_dm/__init__.py"
 search = '__version__ = "{current_version}"'
 replace = '__version__ = "{new_version}"'
+
+# 3. Update the Docs config
+[[tool.bumpversion.files]]
+filename = "docs/conf.py"
+search = 'release = "{current_version}"'
+replace = 'release = "{new_version}"'

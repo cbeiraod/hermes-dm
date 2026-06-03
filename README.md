@@ -120,6 +120,11 @@ Follow these steps to set up an isolated development environment running your co
    ```
    *Note: If you are using Zsh, make sure to wrap the target in quotes: `pip install -e ".[dev]"`*
 
+   Optionally, **install the package in editable mode with development, testing, and documentation extras:**
+   ```bash
+   pip install -e ".[dev,docs]"
+   ```
+
 5. **Install the local Git hooks:**
    ```bash
    pre-commit install
@@ -136,6 +141,7 @@ We use a modern, consolidated tool stack to enforce code quality, verify async t
 | **Pytest** | Test runner for client, server routing, and database logs | `pytest` |
 | **Ruff** | Lightning-fast linter, formatter, and import sorter | `ruff check` (lint) <br> `ruff format` (style) |
 | **Pre-commit** | Framework managing local Git hooks and code safety | `pre-commit run --all-files` |
+| **Sphinx** | Documentation generator extracting structural Python docstrings | `sphinx-build -b html docs/ docs/_build/html` |
 | **Bump-my-version** | Automated single-source-of-truth version bumping | `bump-my-version bump [patch\|minor\|major]` |
 | **Build** | Creates standard PEP 517 source archives and wheels | `python -m build` |
 | **Twine** | Securely uploads distribution wheels to PyPI | `twine upload dist/*` |
@@ -160,6 +166,13 @@ We use a modern, consolidated tool stack to enforce code quality, verify async t
   ```bash
   pre-commit run --all-files
   ```
+
+* **Building Documentation Locally:**
+  To compile your `.rst` design layout and extract code docstrings via Sphinx into a responsive, dark-mode-ready static HTML site using the Furo theme:
+  ```bash
+  sphinx-build -b html docs/ docs/_build/html
+  ```
+  *After compilation, open `docs/_build/html/index.html` in your browser to preview the output.*
 
 * **Executing a Release Version Bump:**
   To safely increment versions across your `pyproject.toml` and package `__init__.py` while auto-generating tracking commits and release candidate tags:
