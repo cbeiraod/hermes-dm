@@ -115,6 +115,7 @@ jobs:
   build-dist:
     name: Build distribution 📦
     needs: test-extended-os       # Wait for all tests on all OSs to pass!
+    #needs: test-linux       # Wait for all linux tests to pass!
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
 

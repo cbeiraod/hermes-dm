@@ -55,6 +55,7 @@ def temp_db():
         yield db_manager
 
     # Teardown phase: The temporary directory is automatically deleted here
+    db_manager.close()
 
 
 @pytest_asyncio.fixture
