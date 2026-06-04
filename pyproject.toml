@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hermes-dm"
-version = "0.0.1"
+version = "0.0.1a1"
 authors = [
     { name="Cristóvão Beirão da Cruz e Silva", email="cbeiraod@cern.ch" }
 ]
@@ -142,7 +142,7 @@ quote-style = "preserve"
 indent-style = "space"
 
 [tool.bumpversion]
-current_version = "0.0.1"
+current_version = "0.0.1a1"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(?:(?P<release>[a-zA-Z]+)(?P<build>\\d+))?"
 serialize = [
     "{major}.{minor}.{patch}{release}{build}",

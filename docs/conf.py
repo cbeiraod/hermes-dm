@@ -10,7 +10,7 @@ copyright = "2026, Cristóvão Beirão da Cruz e Silva"
 author = "Cristóvão Beirão da Cruz e Silva"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.1"
+release = "0.0.1a1"
 
 # -- General configuration ---------------------------------------------------
 extensions = [
