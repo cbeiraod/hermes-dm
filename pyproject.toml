@@ -87,6 +87,22 @@ hermes = "hermes_dm.cli:main"
 hermes-daemon = "hermes_dm.daemoncli:main"
 hermes-monitor = "hermes_dm.monitor:main"
 
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+# addopts can remain a single string
+addopts = "-ra --strict-markers"
+pythonpath = ["src"]
+
+markers = [
+    "hardware: mark a test as requiring a physical instrument connection"
+]
+
+filterwarnings = [
+    # Ignore the PyUSB ctypes memory layout deprecation warning
+    "ignore:Due to '_pack_':DeprecationWarning:usb.backend.*"
+]
+
 [tool.ruff]
 # Target Python 3.9 features
 target-version = "py39"
