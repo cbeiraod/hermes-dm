@@ -91,6 +91,40 @@ class PowerSupplyDaemon:
             # Send the reply back to the client
             await self.cmd_socket.send_string(json.dumps(response))
 
+    async def stop(self):
+        """Cleanly shuts down the daemon, disconnects hardware, and releases network ports."""
+        print("Initiating daemon shutdown...")
+
+        # 1. Stop all background polling tasks
+        self.stop_logging({})
+
+        # 2. Disconnect all instruments gracefully
+        # We cast the keys to a list because disconnect_device uses .pop(),
+        # which would throw a "dictionary changed size during iteration" error otherwise.
+        device_names = list(self.connected_devices.keys())
+        for name in device_names:
+            await self.disconnect_device({"name": name})
+
+        # 3. Shut down the shared thread pool so it doesn't leave zombie threads
+        self.shared_gpib_executor.shutdown(wait=True)
+
+        # 4. Close the PyVISA Resource Manager
+        if hasattr(self.visa_rm, "close"):
+            self.visa_rm.close()
+
+        # 5. Close the SQLite Database (Assuming your DatabaseManager has a close method.
+        # If not, you might want to add a quick self.conn.close() to your db.py)
+        if hasattr(self.db, "close"):
+            self.db.close()
+
+        # 6. Destroy the ZeroMQ Sockets and Context
+        # Linger=0 tells ZMQ to drop any unsent messages immediately rather than hanging forever.
+        self.cmd_socket.close(linger=0)
+        self.pub_socket.close(linger=0)
+        self.ctx.term()
+
+        print("Daemon shutdown complete.")
+
     def list_devices(self, args: dict) -> dict:
         return {"status": "success", "data": {name: inst.identifier for name, inst in self.connected_devices.items()}}
 
