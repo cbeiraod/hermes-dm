@@ -8,12 +8,21 @@ class DatabaseManager:
         os.makedirs(self.db_directory, exist_ok=True)
         self.conn = None
 
+    def close(self):
+        """Safely closes the database connection and releases file locks."""
+        if self.conn is not None:
+            self.conn.close()
+            self.conn = None
+
     def set_file(self, filename: str) -> bool:
         """Returns True if successful, False if file already exists."""
         filepath = os.path.join(self.db_directory, f"{filename}.sqlite")
 
         if os.path.exists(filepath):
             return False
+
+        if self.conn is not None:
+            self.close()
 
         self.conn = sqlite3.connect(filepath, check_same_thread=False)
         self._create_schema()
