@@ -1,0 +1,45 @@
+eom:
+  GPIB INSTR:
+    q: "\n"
+    r: "\n"
+  USB INSTR:
+    q: "\n"
+    r: "\n"
+  ASRL INSTR:
+    q: "\r\n"
+    r: "\n"
+error: "ERROR"
+properties:
+  voltage_setpoint:
+    default: 0.0
+    getter:
+      q: ":SOUR:VOLT?"
+      r: "{:0.2f}" # Python string formatting style (e.g., 5.00)
+    setter:
+      q: ":SOUR:VOLT {}"
+  source_mode:
+    default: "VOLT"
+    setter:
+      q: ":SOUR:FUNC {}"
+    getter:
+      q: ":SOUR:FUNC?"
+      r: "{}"
+  output_state:
+    default: "OFF"
+    setter:
+      q: ":OUTP {}"
+    getter:
+      q: ":OUTP?"
+      r: "{}"
+  system_reset:
+    default: "0"
+    setter:
+      q: "*RST"
+    getter:
+      q: "DUMMY_RST_QUERY?"
+      r: "0"
+dialogues:
+  - q: "*IDN?"
+    r: "KEITHLEY INSTRUMENTS INC.,MODEL 2410,1234567,C30"
+  - q: ":READ?"
+    r: "+1.20000E+01,+5.00000E-02,+2.40000E+02,+0.00000E+00,+0.00000E+00"

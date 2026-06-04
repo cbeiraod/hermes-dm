@@ -1,0 +1,11 @@
+spec: "1.1"
+
+resources:
+  ASRL1::INSTR:
+    device: Generic_PSU
+  ASRL2::INSTR:
+    device: Keithley_2410
+  GPIB0::15::INSTR:
+    device: Keithley_2410
+  USB0::0x05E6::0x2410::1234567::0::INSTR:
+    device: Keithley_2410

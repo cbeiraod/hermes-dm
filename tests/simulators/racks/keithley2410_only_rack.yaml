@@ -1,0 +1,7 @@
+spec: "1.1"
+
+resources:
+  ASRL1::INSTR:
+    device: Keithley_2410
+  GPIB0::15::INSTR:
+    device: Keithley_2410

@@ -1,0 +1,8 @@
+eom:
+  GPIB INSTR:
+    q: "\n"
+    r: "\n"
+error: "ERROR"
+dialogues:
+  - q: "*IDN?"
+    r: "Simulated_Hardware,Generic_PSU,SN12345,V1.0"
