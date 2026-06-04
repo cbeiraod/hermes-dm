@@ -1,4 +1,5 @@
 import asyncio
+import inspect
 import json
 import logging
 import time
@@ -55,12 +56,12 @@ class PowerSupplyDaemon:
             "configure_device": self.configure_device,
             "get_status": self.get_status,
             "set_interval": self.set_interval,
-            "set_output": self.set_output,
-            "read_data": self.read_data,
-            "query_error": self.query_error,
-            "beep": self.beep,
-            "identify": self.identify,
-            "reset": self.reset,
+            # "set_output": self.set_output,
+            # "read_data": self.read_data,
+            # "query_error": self.query_error,
+            # "beep": self.beep,
+            # "identify": self.identify,
+            # "reset": self.reset,
             "set_db_logging": self.set_db_logging,
             "set_db_file": self.set_db_file,
             "start_logging": self.start_logging,
@@ -280,14 +281,21 @@ class PowerSupplyDaemon:
         self.logging_tasks.clear()
         return {"status": "success", "message": "Logging stopped."}
 
-    async def handle_command(self, command: str, args: dict) -> dict:
-        """Command Router."""
+    async def handle_command(self, command: str, payload: dict) -> dict:
         handler = self._routes.get(command)
 
         if not handler:
             return {"status": "error", "message": f"Unknown command: {command}"}
 
-        return handler(args)
+        # Execute the function
+        result = handler(payload)
+
+        # If the function was an 'async def', we must await the coroutine!
+        if inspect.isawaitable(result):
+            result = await result
+
+        # Return the final resolved dictionary
+        return result
 
     async def _poll_device(self, device_name: str):
         """Background task that runs continuously for a specific device."""
