@@ -143,9 +143,27 @@ indent-style = "space"
 
 [tool.bumpversion]
 current_version = "0.0.1"
+parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(?:-(?P<release>[a-zA-Z]+)(?P<build>\\d+))?"
+serialize = [
+    "{major}.{minor}.{patch}-{release}{build}",
+    "{major}.{minor}.{patch}"
+]
 commit = true
 tag = true
 commit_args = "--no-verify" # Skips pre-commit hooks during the automated version bump commit
+
+[tool.bumpversion.parts.release]
+optional_value = "final"
+first_value = "a"
+values = [
+    "a",      # alpha
+    "b",      # beta
+    "rc",     # release candidate
+    "final"   # standard release (omitted from string)
+]
+
+[tool.bumpversion.parts.build]
+first_value = "1"
 
 # 1. Update the pyproject.toml version
 [[tool.bumpversion.files]]

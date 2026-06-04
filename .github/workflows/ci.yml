@@ -108,3 +108,35 @@ jobs:
 
       - name: Run Pytest
         run: pytest -v
+
+  # ==========================================
+  # JOB 4: PUBLISH TO PYPI
+  # ==========================================
+  publish-to-pypi:
+    name: Publish to PyPI
+    needs: [test-extended-os] # Rule 1: This job WILL NOT start unless 'test-extended-os' passes!
+    if: startsWith(github.ref, 'refs/tags/v') # Rule 2: Only run if this was triggered by a tag!
+    runs-on: ubuntu-latest
+
+    # Required for Trusted Publishing (OIDC)
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+
+      - name: Install build dependencies
+        run: python -m pip install --upgrade pip build
+
+      - name: Build Source Distribution and Wheel
+        run: python -m build
+
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
