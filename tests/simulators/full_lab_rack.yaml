@@ -1,0 +1,56 @@
+spec: "1.1"
+
+resources:
+  ASRL1::INSTR:
+    device: Generic_PSU
+  ASRL2::INSTR:
+    device: Keithley_2410
+  GPIB0::15::INSTR:
+    device: Keithley_2410
+  USB0::0x05E6::0x2410::1234567::0::INSTR:
+    device: Keithley_2410
+
+devices:
+  # --- DEVICE 1: The Generic Power Supply ---
+  Generic_PSU:
+    eom:
+      GPIB INSTR:
+        q: "\n"
+        r: "\n"
+    error: "ERROR"
+    dialogues:
+      - q: "*IDN?"
+        r: "Simulated_Hardware,Generic_PSU,SN12345,V1.0"
+
+  # --- DEVICE 2: The Keithley 2410 ---
+  Keithley_2410:
+    eom:
+      GPIB INSTR:
+        q: "\n"
+        r: "\n"
+      USB INSTR:
+        q: "\n"
+        r: "\n"
+      ASRL INSTR:
+        q: "\r\n"
+        r: "\n"
+    error: "ERROR"
+    properties:
+      voltage_setpoint:
+        default: 0.0
+        getter:
+          q: ":SOUR:VOLT?"
+          r: "{:0.2f}" # Python string formatting style (e.g., 5.00)
+        setter:
+          q: ":SOUR:VOLT {}" # Intercepts the number and updates memory
+    dialogues:
+      - q: "*IDN?"
+        r: "KEITHLEY INSTRUMENTS INC.,MODEL 2410,1234567,C30"
+      - q: "*RST"
+        r: ""
+      - q: ":READ?"
+        r: "+1.20000E+01,+5.00000E-02,+2.40000E+02,+0.00000E+00,+0.00000E+00"
+      - q: ":OUTP ON"
+        r: ""
+      - q: ":OUTP OFF"
+        r: ""
