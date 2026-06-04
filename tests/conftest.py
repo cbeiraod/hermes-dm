@@ -54,8 +54,16 @@ def temp_db():
         # Yield hands control over to the actual test
         yield db_manager
 
-    # Teardown phase: The temporary directory is automatically deleted here
-    db_manager.close()
+        # Teardown phase: The temporary directory is automatically deleted here
+        db_manager.close()
+
+        # Give the Windows OS kernel exactly 1 second to release the file handle
+        # on the SQLite database and its WAL/journal files.
+        import platform
+        import time
+
+        if platform.system() == "Windows":
+            time.sleep(1.0)
 
 
 @pytest_asyncio.fixture
