@@ -1,28 +1,35 @@
-import zmq
 import json
-from typing import Dict, Any, List, Optional
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+
+import zmq
+
 
 class HermesError(Exception):
     """Custom exception raised when the daemon returns an error."""
+
     pass
+
 
 class HermesClient:
     """
     Synchronous client for communicating with the Hermes Device Manager daemon.
     """
-    
+
     def __init__(self, host: str = "localhost", port: int = 5555, timeout_ms: int = 5000):
         self.host = host
         self.port = port
-        
+
         # Initialize ZeroMQ context and Request (REQ) socket
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.REQ)
-        
+
         # Connect to the daemon
         self.socket.connect(f"tcp://{self.host}:{self.port}")
-        
-        # CRITICAL: Set a receive timeout. 
+
+        # CRITICAL: Set a receive timeout.
         # If the daemon crashes, we don't want client scripts to hang forever waiting.
         self.socket.setsockopt(zmq.RCVTIMEO, timeout_ms)
 
@@ -30,28 +37,25 @@ class HermesClient:
         """Internal helper to package, send, and validate JSON commands."""
         if args is None:
             args = {}
-            
-        payload = {
-            "command": command,
-            "args": args
-        }
-        
+
+        payload = {"command": command, "args": args}
+
         try:
             # 1. Send the JSON request
             self.socket.send_string(json.dumps(payload))
-            
+
             # 2. Wait for the reply
             response_str = self.socket.recv_string()
-            
-        except zmq.error.Again:
-            raise TimeoutError(f"No response from Hermes daemon at {self.host}:{self.port}. Is it running?")
-            
+
+        except zmq.error.Again as e:
+            raise TimeoutError(f"No response from Hermes daemon at {self.host}:{self.port}. Is it running?") from e
+
         response = json.loads(response_str)
-        
+
         # 3. Handle daemon-side errors cleanly
         if response.get("status") == "error":
             raise HermesError(response.get("message", "Unknown error occurred on daemon."))
-            
+
         return response
 
     # ==========================================
@@ -64,11 +68,11 @@ class HermesClient:
 
     def list_scpi_resources(self) -> List[str]:
         """
-        Ask the daemon to scan the local hardware bus and return a list 
+        Ask the daemon to scan the local hardware bus and return a list
         of available PyVISA identifiers (e.g., COM ports, USB, GPIB).
         """
         return self._send_command("list_scpi_resources").get("data", [])
-        
+
     def connect_device(self, name: str, identifier: str, model: str = "auto") -> str:
         """
         Connect a physical instrument to the daemon.
@@ -120,15 +124,15 @@ class HermesClient:
         """
         args = {"name": name, "enable": False}
         return self._send_command("set_db_logging", args).get("message", "")
-        
+
     def close(self):
         """Cleanly shut down the ZeroMQ socket connection."""
         self.socket.close()
         self.context.term()
-        
+
     # Allow use as a context manager (with block)
     def __enter__(self):
         return self
-        
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()

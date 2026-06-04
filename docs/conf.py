@@ -14,9 +14,9 @@ release = "0.0.1"
 
 # -- General configuration ---------------------------------------------------
 extensions = [
-    "sphinx.ext.autodoc",        # Core library for extracting docstrings
-    "sphinx.ext.napoleon",       # Support for Google/NumPy-style docstrings
-    "sphinx.ext.viewcode",       # Adds a "[source]" link to read the underlying code
+    "sphinx.ext.autodoc",  # Core library for extracting docstrings
+    "sphinx.ext.napoleon",  # Support for Google/NumPy-style docstrings
+    "sphinx.ext.viewcode",  # Adds a "[source]" link to read the underlying code
     "sphinx_autodoc_typehints",  # Merges type hints directly into the parameter descriptions
 ]
 

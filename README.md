@@ -149,7 +149,7 @@ We use a modern, consolidated tool stack to enforce code quality, verify async t
 | :--- | :--- | :--- |
 | **Pytest** | Test runner for client, server routing, and database logs | `pytest` |
 | **Ruff** | Lightning-fast linter, formatter, and import sorter | `ruff check` (lint) <br> `ruff format` (style) |
-| **Pre-commit** | Framework managing local Git hooks and code safety | `pre-commit run --all-files` |
+| **Pre-commit** | Framework managing local Git hooks and code safety | `python -m pre_commit run --all-files` |
 | **Sphinx** | Documentation generator extracting structural Python docstrings | `sphinx-build -b html docs/ docs/_build/html` |
 | **Bump-my-version** | Automated single-source-of-truth version bumping | `bump-my-version bump [patch\|minor\|major]` |
 | **Build** | Creates standard PEP 517 source archives and wheels | `python -m build` |
@@ -173,7 +173,7 @@ We use a modern, consolidated tool stack to enforce code quality, verify async t
 * **Simulating a Pre-commit Run:**
   If you want to evaluate all files against the entire pre-commit stack (including trailing whitespace, end-of-file fixers, and forgotten debug statements) without committing code:
   ```bash
-  pre-commit run --all-files
+  python -m pre_commit run --all-files
   ```
 
 * **Building Documentation Locally:**
