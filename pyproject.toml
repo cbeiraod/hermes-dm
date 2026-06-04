@@ -168,7 +168,7 @@ first_value = "1"
 # 1. Update the pyproject.toml version
 [[tool.bumpversion.files]]
 filename = "pyproject.toml"
-search = 'version = "{current_version}"'
+search = '^version = "{current_version}"'
 replace = 'version = "{new_version}"'
 
 # 2. Update the Python package __init__ version
