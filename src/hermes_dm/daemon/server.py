@@ -119,9 +119,10 @@ class PowerSupplyDaemon:
 
         # 6. Destroy the ZeroMQ Sockets and Context
         # Linger=0 tells ZMQ to drop any unsent messages immediately rather than hanging forever.
-        self.cmd_socket.close(linger=0)
-        self.pub_socket.close(linger=0)
-        self.ctx.term()
+        # self.cmd_socket.close(linger=0)
+        # self.pub_socket.close(linger=0)
+        # self.ctx.term()
+        self.ctx.destroy(linger=0)
 
         print("Daemon shutdown complete.")
 
