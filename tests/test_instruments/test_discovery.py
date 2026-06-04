@@ -23,7 +23,7 @@ async def test_auto_discovery_and_connect(simulated_daemon):
     connect_args = {
         "identifier": "GPIB0::15::INSTR",
         "name": "Auto_Discovered_Keithley",
-        "model": "auto",  # <-- This is the magic trigger we are testing!
+        "model": "auto",  # <-- This is the trigger we are testing!
     }
 
     connect_response = await daemon.handle_command("connect_device", connect_args)
